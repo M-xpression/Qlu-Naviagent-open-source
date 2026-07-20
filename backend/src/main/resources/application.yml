@@ -1,0 +1,69 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 50MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+
+# MyBatis-Plus
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.qlu.campus.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# Sa-Token
+sa-token:
+  token-name: Authorization
+  timeout: 86400
+  active-timeout: 1800
+  is-concurrent: true
+  is-share: false
+  token-style: uuid
+  is-log: false
+
+# Knife4j
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+# AI 模型配置
+ai:
+  deepseek:
+    api-key: ${DEEPSEEK_API_KEY:your-deepseek-api-key}
+    base-url: https://api.deepseek.com
+    model: deepseek-chat
+  zhipu:
+    api-key: ${ZHIPU_API_KEY:your-zhipu-api-key}
+    base-url: https://open.bigmodel.cn/api/paas/v4
+    model: glm-4-flash
+  # 主模型选择: deepseek / zhipu
+  primary: deepseek
+
+# MinIO
+minio:
+  endpoint: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket: qlu-campus

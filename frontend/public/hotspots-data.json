@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "name": "第一教学楼",
+    "category": "teaching",
+    "xPercent": 37.5,
+    "yPercent": 51,
+    "description": "主要教学楼之一",
+    "openTime": "7:00-22:00",
+    "images": "[]",
+    "isPublished": true
+  },
+  {
+    "id": 2,
+    "name": "第二教学楼",
+    "category": "teaching",
+    "xPercent": 36.5,
+    "yPercent": 46.9,
+    "description": "主要教学楼之一",
+    "openTime": "7:00-22:00",
+    "images": "[]",
+    "isPublished": true
+  },
+  {
+    "id": 3,
+    "name": "第三教学楼",
+    "category": "teaching",
+    "xPercent": 39.6,
+    "yPercent": 42,
+    "description": "主要是艺术类教学楼",
+    "openTime": "7:00-22:00",
+    "images": "[]",
+    "isPublished": true
+  },
+  {
+    "id": 4,
+    "name": "第一食堂",
+    "category": "dining",
+    "xPercent": 85.6,
+    "yPercent": 63.3,
+    "description": "消费较高，平均15-30元",
+    "openTime": "6:30-18:30",
+    "images": "[]",
+    "isPublished": true
+  },
+  {
+    "id": 5,
+    "name": "第二食堂",
+    "category": "dining",
+    "xPercent": 84.7,
+    "yPercent": 22.5,
+    "description": "平均消费12-20元",
+    "openTime": "6:30-18:30",
+    "images": "[]",
+    "isPublished": true
+  },
+  {
+    "id": 6,
+    "name": "第三食堂",
+    "category": "dining",
+    "xPercent": 52.3,
+    "yPercent": 36.4,
+    "description": "平均消费12-20元",
+    "openTime": "6:30-18:30",
+    "images": "[]",
+    "isPublished": true
+  },
+  {
+    "id": 7,
+    "name": "图书馆",
+    "category": "library",
+    "xPercent": 55.7,
+    "yPercent": 58.4,
+    "description": "早6点-晚10点开放，全校第二宏伟建筑",
+    "openTime": "6:00-22:00",
+    "images": "[]",
+    "isPublished": true
+  },
+  {
+    "id": 8,
+    "name": "菜鸟驿站",
+    "category": "service",
+    "xPercent": 91,
+    "yPercent": 23.1,
+    "description": "全长清最大快递站，邮政快递在家属院天猫超市拿",
+    "openTime": "8:00-22:00",
+    "images": "[]",
+    "isPublished": true
+  },
+  {
+    "id": 11,
+    "name": "老操场",
+    "category": "sports",
+    "xPercent": 65.2,
+    "yPercent": 24.6,
+    "description": "标准运动场，晚上有各种活动",
+    "images": "[]",
+    "isPublished": true
+  },
+  {
+    "id": 12,
+    "name": "行政楼",
+    "category": "admin",
+    "xPercent": 72.5,
+    "yPercent": 64.1,
+    "description": "学校行政办公",
+    "openTime": "8:00-17:30",
+    "images": "[]",
+    "isPublished": true
+  },
+  {
+    "name": "新操场",
+    "category": "sports",
+    "description": "新修的体育场，环境优美",
+    "openTime": "",
+    "xPercent": 78.4,
+    "yPercent": 42.9,
+    "isPublished": true,
+    "id": 13,
+    "images": "[]"
+  }
+]

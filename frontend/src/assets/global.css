@@ -1,0 +1,72 @@
+/* ===== 全局样式 ===== */
+:root {
+  --primary: #1a6fb5;
+  --primary-light: #4a90d9;
+  --primary-dark: #0d4f85;
+  --accent: #f0a030;
+  --bg: #f5f7fa;
+  --text: #2c3e50;
+  --text-light: #6b7d8e;
+  --border: #e4e7ed;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  --radius: 12px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+               'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* 页面过渡 */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(12px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-12px);
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #c0c4cc;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #909399;
+}
+
+/* Element Plus 覆盖 */
+.el-button--primary {
+  --el-button-bg-color: var(--primary);
+  --el-button-border-color: var(--primary);
+}
+.el-button--primary:hover {
+  --el-button-bg-color: var(--primary-light);
+  --el-button-border-color: var(--primary-light);
+}

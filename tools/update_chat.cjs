@@ -1,0 +1,10 @@
+const fs = require('fs');
+const file = 'F:\\桌面\\qlu-campus-guide\\frontend\\src\\views\\ChatView.vue';
+let c = fs.readFileSync(file, 'utf-8');
+const start = c.indexOf('const SYSTEM_PROMPT = `');
+const end = c.indexOf('\n\n// Markdown rendering', start);
+const prefix = c.slice(0, start + 'const SYSTEM_PROMPT = `'.length);
+const suffix = c.slice(end);
+const newPrompt = fs.readFileSync('F:\\桌面\\qlu-campus-guide\\knowledge\\expanded_prompt.txt', 'utf-8');
+fs.writeFileSync(file, prefix + newPrompt + suffix, 'utf-8');
+console.log('OK, wrote', (prefix+newPrompt+suffix).length, 'bytes');
