@@ -34,9 +34,6 @@ function persistHotspots() {
   }
 }
 
-}
-
-
 export default defineConfig({
   plugins: [
     vue(),
