@@ -34,22 +34,13 @@ function persistHotspots() {
   }
 }
 
-// 生产构建时生成 _redirects，确保 Vercel SPA 路由正常
-function spaRedirects() {
-  return {
-    name: 'spa-redirects',
-    closeBundle() {
-      const outDir = resolve(__dirname, 'dist')
-      writeFileSync(resolve(outDir, '_redirects'), '/*    /index.html   200\n')
-    }
-  }
 }
+
 
 export default defineConfig({
   plugins: [
     vue(),
     persistHotspots(),
-    spaRedirects(),
     AutoImport({
       resolvers: [ElementPlusResolver()],
       imports: ['vue', 'vue-router', 'pinia']
