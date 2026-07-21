@@ -2,7 +2,7 @@
   <header class="app-header" :class="{ scrolled }">
     <div class="header-inner">
       <router-link to="/" class="logo">
-        <img src="/emblem.jpg" class="logo-icon" alt="校徽" />
+        <img src="/emblem.png" class="logo-icon" alt="校徽" />
         <div class="logo-text">
           <span class="logo-title">齐鲁工业大学</span>
           <span class="logo-subtitle">校园智能导览</span>
