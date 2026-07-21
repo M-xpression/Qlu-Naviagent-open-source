@@ -7,6 +7,7 @@
         <div class="hero-orb orb-2"></div>
       </div>
       <div class="hero-content">
+        <img src="/emblem.jpg" class="hero-emblem" alt="校徽" />
         <span class="hero-badge">🎉 2026 新生指南</span>
         <h1 class="hero-title">齐鲁工业大学(山东省科学院)</h1>
         <p class="hero-subtitle">明德励志 崇实尚能</p>
@@ -19,10 +20,14 @@
             <el-icon><ChatDotRound /></el-icon> 问问Mars学长
           </el-button>
         </div>
+        <div class="scroll-hint" @click="scrollDown">
+          <span class="scroll-text">下滑查看更多</span>
+          <span class="scroll-arrow">↓</span>
+        </div>
       </div>
     </section>
 
-    <!-- 电脑端完整内容 -->
+    <!-- 可下滑查看更多内容 -->
     <div class="desktop-sections">
       <!-- 校园设施 -->
       <section class="section section-alt">
@@ -159,8 +164,9 @@ const checklist = [
   { icon: '💳', title: '财务准备', items: ['开通通知书里的银行卡', '带少量现金备用'] },
 ]
 
-const expandGuide = (g) => {
-  g.expanded = !g.expanded
+const expandGuide = (g) => { g.expanded = !g.expanded }
+const scrollDown = () => {
+  document.querySelector('.desktop-sections')?.scrollIntoView({ behavior: 'smooth' })
 }
 </script>
 
@@ -199,6 +205,7 @@ const expandGuide = (g) => {
   66% { transform: translate(-20px, 20px) scale(0.95); }
 }
 .hero-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+.hero-emblem { width: 80px; height: 80px; object-fit: contain; margin-bottom: 16px; }
 .hero-badge {
   display: inline-block;
   padding: 6px 18px;
@@ -232,6 +239,23 @@ const expandGuide = (g) => {
   margin-right: auto;
 }
 .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.scroll-hint {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  animation: bounce-down 2s ease-in-out infinite;
+}
+.scroll-text { font-size: 13px; color: var(--text-light); }
+.scroll-arrow { font-size: 24px; color: var(--primary);
+  animation: arrow-bounce 0.8s ease-in-out infinite alternate; }
+@keyframes arrow-bounce { 0% { transform: translateY(0); } 100% { transform: translateY(8px); } }
+@keyframes bounce-down {
+  0%, 100% { opacity: 0.5; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(6px); }
+}
 .btn-outline {
   background: rgba(255,255,255,0.7) !important;
   border: 2px solid var(--border) !important;
@@ -407,8 +431,6 @@ const expandGuide = (g) => {
   color: var(--text-light);
 }
 
-/* 手机端：只显示 Hero 区域，全屏居中 */
-.desktop-sections { display: block; }
 @media (max-width: 768px) {
   .hero {
     min-height: 100dvh;
@@ -419,6 +441,7 @@ const expandGuide = (g) => {
     justify-content: center;
     padding: 40px 20px;
   }
+  .hero-emblem { width: 90px; height: 90px; }
   .hero-title { font-size: 34px; }
   .hero-subtitle { font-size: 16px; }
   .hero-desc { font-size: 14px; }
@@ -426,9 +449,13 @@ const expandGuide = (g) => {
   .hero-actions { flex-direction: column; align-items: center; }
   .hero-actions .el-button { width: 220px; }
   .hero-content { max-width: 100%; }
-  .desktop-sections { display: none; }
+  .facility-grid { grid-template-columns: 1fr; }
+  .quick-links { grid-template-columns: 1fr; }
+  .checklist-grid { grid-template-columns: repeat(2, 1fr); padding: 0 16px; }
 }
 @media (max-width: 360px) {
   .hero-title { font-size: 28px; }
+  .hero-emblem { width: 70px; height: 70px; }
+  .checklist-grid { grid-template-columns: 1fr; }
 }
 </style>
