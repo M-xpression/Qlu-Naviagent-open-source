@@ -7,7 +7,7 @@
         <div class="hero-orb orb-2"></div>
       </div>
       <div class="hero-content">
-        <img src="/emblem.jpg" class="hero-emblem" alt="校徽" />
+        <img src="/emblem.png" class="hero-emblem" alt="校徽" />
         <span class="hero-badge">🎉 2026 新生指南</span>
         <h1 class="hero-title">齐鲁工业大学(山东省科学院)</h1>
         <p class="hero-subtitle">明德励志 崇实尚能</p>
@@ -205,7 +205,7 @@ const scrollDown = () => {
   66% { transform: translate(-20px, 20px) scale(0.95); }
 }
 .hero-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
-.hero-emblem { width: 120px; height: 120px; object-fit: contain; margin: 0 auto 20px; display: block; }
+.hero-emblem { width: 150px; height: 150px; object-fit: contain; margin: 0 auto 20px; display: block; }
 .hero-badge {
   display: inline-block;
   padding: 6px 18px;
@@ -441,7 +441,7 @@ const scrollDown = () => {
     justify-content: center;
     padding: 40px 20px;
   }
-  .hero-emblem { width: 110px; height: 110px; }
+  .hero-emblem { width: 130px; height: 130px; }
   .hero-title { font-size: 34px; }
   .hero-subtitle { font-size: 16px; }
   .hero-desc { font-size: 14px; }
