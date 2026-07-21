@@ -205,7 +205,7 @@ const scrollDown = () => {
   66% { transform: translate(-20px, 20px) scale(0.95); }
 }
 .hero-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
-.hero-emblem { width: 80px; height: 80px; object-fit: contain; margin-bottom: 16px; }
+.hero-emblem { width: 120px; height: 120px; object-fit: contain; margin: 0 auto 20px; display: block; }
 .hero-badge {
   display: inline-block;
   padding: 6px 18px;
@@ -441,7 +441,7 @@ const scrollDown = () => {
     justify-content: center;
     padding: 40px 20px;
   }
-  .hero-emblem { width: 90px; height: 90px; }
+  .hero-emblem { width: 110px; height: 110px; }
   .hero-title { font-size: 34px; }
   .hero-subtitle { font-size: 16px; }
   .hero-desc { font-size: 14px; }
