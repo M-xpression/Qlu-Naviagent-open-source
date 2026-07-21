@@ -63,16 +63,21 @@
           @mouseup="onMouseUp" @mouseleave="onMouseUp"
           @touchstart.prevent="onCanvasTouchStart" @touchmove.prevent="onTouchMove" @touchend="onTouchEnd">
 
+          <!-- loading -->
+          <div class="map-loading" v-if="!imgLoaded">
+            <div class="loading-spinner"></div>
+            <span>加载地图中...</span>
+          </div>
           <!-- map-inner = 图片原始尺寸，通过 transform 缩放平移 -->
-          <div class="map-inner" :style="mapTransform" ref="mapInner">
+          <div class="map-inner" :style="mapTransform" ref="mapInner" v-show="imgLoaded">
             <img src="/map/changqing-campus.jpg" alt="长清校区平面图"
               class="campus-map-img" draggable="false" ref="mapImg" @load="onImageLoad" />
 
-            <!-- 热点层：position:absolute inset:0，和图片完全对齐 -->
-            <div class="hotspot-layer">
+            <!-- 热点层：图片加载完成后才显示 -->
+            <div class="hotspot-layer" v-show="imgLoaded">
               <div v-for="h in store.filteredHotspots" :key="h.id" class="hotspot-dot"
                 :class="['cat-' + h.category, { active: store.selectedHotspot?.id === h.id }]"
-                :style="{ left: h.xPercent + '%', top: h.yPercent + '%', transform: `translate(-50%, -50%) scale(${1/scale})` }"
+                :style="{ left: h.xPercent + '%', top: h.yPercent + '%', transform: `translate(-50%, -50%) scale(${scale > 0.05 ? 1/scale : 1})` }"
                 @mousedown.stop @click.stop="onHotspotClick(h)">
                 <div class="dot-inner"><span>{{ categoryIcon(h.category) }}</span></div>
                 <span class="dot-label">{{ h.name }}</span>
@@ -118,6 +123,7 @@ const mapWrapper = ref(null)
 const mapCanvas = ref(null)
 const mapInner = ref(null)
 const mapImg = ref(null)
+const imgLoaded = ref(false)
 const imgW = ref(1)
 const imgH = ref(1)
 
@@ -144,6 +150,7 @@ function onImageLoad() {
   const img = mapImg.value
   imgW.value = img.naturalWidth || 1
   imgH.value = img.naturalHeight || 1
+  imgLoaded.value = true
   recenterImage()
   window.addEventListener('resize', recenterImage)
 }
@@ -377,6 +384,9 @@ const categoryLabel = (cat) => ({ teaching: '教学楼', dining: '食堂', dormi
 .hotspot-list-btn { display: none; }
 .coord-indicator { position: absolute; top: 16px; left: 16px; z-index: 10; padding: 8px 16px; background: rgba(0,0,0,0.75); color: #fff; font-size: clamp(13px, 2vw, 16px); font-family: monospace; border-radius: 8px; pointer-events: none; }
 
+.map-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--text-light); font-size: 14px; }
+.loading-spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .map-canvas { width: 100%; height: 100%; overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none; }
 .map-inner { position: absolute; top: 0; left: 0; }
 .campus-map-img { width: 100%; height: 100%; display: block; user-select: none; pointer-events: none; }

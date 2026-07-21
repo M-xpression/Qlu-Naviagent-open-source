@@ -22,127 +22,103 @@
       </div>
     </section>
 
-    <!-- 基本信息卡片 -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section-title">🏫 长清校区概览</h2>
-        <p class="section-desc">济南市长清区大学路3501号 · 大学城中心地段</p>
-        <div class="address-tip">
-          📦 快递地址：山东省济南市长清区崮云湖街道大学路3501号 齐鲁工业大学(山东省科学院)长清校区
+    <!-- 电脑端完整内容 -->
+    <div class="desktop-sections">
+      <!-- 校园设施 -->
+      <section class="section section-alt">
+        <div class="section-header">
+          <h2 class="section-title">🏗️ 校园设施</h2>
         </div>
-      </div>
-      <div class="stats-grid">
-        <div class="stat-card" v-for="stat in stats" :key="stat.label">
-          <div class="stat-icon">{{ stat.icon }}</div>
-          <div class="stat-value">{{ stat.value }}</div>
-          <div class="stat-label">{{ stat.label }}</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 校园设施 -->
-    <section class="section section-alt">
-      <div class="section-header">
-        <h2 class="section-title">🏗️ 校园设施</h2>
-      </div>
-      <div class="facility-grid">
-        <div class="facility-card" v-for="f in facilities" :key="f.name">
-          <div class="facility-icon">{{ f.icon }}</div>
-          <h3>{{ f.name }}</h3>
-          <p>{{ f.desc }}</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 生活指南 -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section-title">📋 新生必读</h2>
-      </div>
-      <div class="guide-grid">
-        <div class="guide-card" v-for="g in guides" :key="g.title" @click="expandGuide(g)">
-          <div class="guide-header">
-            <span class="guide-icon">{{ g.icon }}</span>
-            <h3>{{ g.title }}</h3>
-            <el-icon class="guide-arrow"><ArrowRight /></el-icon>
-          </div>
-          <transition name="expand">
-            <p v-if="g.expanded" class="guide-content">{{ g.content }}</p>
-          </transition>
-        </div>
-      </div>
-    </section>
-
-    <!-- 新生必备物资 -->
-    <section class="section section-alt">
-      <div class="section-header">
-        <h2 class="section-title">🎒 新生必备物资清单</h2>
-        <p class="section-desc">开学前照着准备，不慌不忙~</p>
-      </div>
-      <div class="checklist-grid">
-        <div class="check-card" v-for="item in checklist" :key="item.title">
-          <div class="check-icon">{{ item.icon }}</div>
-          <div class="check-body">
-            <h4>{{ item.title }}</h4>
-            <ul>
-              <li v-for="d in item.items" :key="d">{{ d }}</li>
-            </ul>
+        <div class="facility-grid">
+          <div class="facility-card" v-for="f in facilities" :key="f.name">
+            <div class="facility-icon">{{ f.icon }}</div>
+            <h3>{{ f.name }}</h3>
+            <p>{{ f.desc }}</p>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- 快速导航 -->
-    <section class="section section-alt">
-      <div class="section-header">
-        <h2 class="section-title">🧭 快速导航</h2>
-      </div>
-      <div class="quick-links">
-        <router-link to="/map" class="quick-link-card map-link">
-          <span class="ql-icon">🗺️</span>
-          <span class="ql-text">
-            <strong>校园地图</strong>
-            <small>查看教学楼、食堂、宿舍位置</small>
-          </span>
-        </router-link>
-        <router-link to="/chat" class="quick-link-card chat-link">
-          <span class="ql-icon">🤖</span>
-          <span class="ql-text">
-            <strong>Mars学长</strong>
-            <small>有任何校园问题，问Mars学长</small>
-          </span>
-        </router-link>
-      </div>
-    </section>
-
-    <!-- 联系作者 -->
-    <section class="section">
-      <div class="section-header">
-        <h2 class="section-title">💬 联系作者</h2>
-        <p class="section-desc">有任何问题或建议，欢迎添加学长微信</p>
-      </div>
-      <div class="contact-card">
-        <img src="/wechat-qr.jpg" alt="微信二维码" class="qr-img" />
-        <div class="contact-info">
-          <span class="contact-tag">📱 扫码添加微信</span>
-          <span class="contact-hint">备注"新生"更快通过哦~</span>
+      <!-- 生活指南 -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">📋 新生必读</h2>
         </div>
-      </div>
-    </section>
+        <div class="guide-grid">
+          <div class="guide-card" v-for="g in guides" :key="g.title" @click="expandGuide(g)">
+            <div class="guide-header">
+              <span class="guide-icon">{{ g.icon }}</span>
+              <h3>{{ g.title }}</h3>
+              <el-icon class="guide-arrow"><ArrowRight /></el-icon>
+            </div>
+            <transition name="expand">
+              <p v-if="g.expanded" class="guide-content">{{ g.content }}</p>
+            </transition>
+          </div>
+        </div>
+      </section>
+
+      <!-- 新生必备物资 -->
+      <section class="section section-alt">
+        <div class="section-header">
+          <h2 class="section-title">🎒 新生必备物资清单</h2>
+          <p class="section-desc">开学前照着准备，不慌不忙~</p>
+        </div>
+        <div class="checklist-grid">
+          <div class="check-card" v-for="item in checklist" :key="item.title">
+            <div class="check-icon">{{ item.icon }}</div>
+            <div class="check-body">
+              <h4>{{ item.title }}</h4>
+              <ul>
+                <li v-for="d in item.items" :key="d">{{ d }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 快速导航 -->
+      <section class="section section-alt">
+        <div class="section-header">
+          <h2 class="section-title">🧭 快速导航</h2>
+        </div>
+        <div class="quick-links">
+          <router-link to="/map" class="quick-link-card map-link">
+            <span class="ql-icon">🗺️</span>
+            <span class="ql-text">
+              <strong>校园地图</strong>
+              <small>查看教学楼、食堂、宿舍位置</small>
+            </span>
+          </router-link>
+          <router-link to="/chat" class="quick-link-card chat-link">
+            <span class="ql-icon">🤖</span>
+            <span class="ql-text">
+              <strong>Mars学长</strong>
+              <small>有任何校园问题，问Mars学长</small>
+            </span>
+          </router-link>
+        </div>
+      </section>
+
+      <!-- 联系作者 -->
+      <section class="section">
+        <div class="section-header">
+          <h2 class="section-title">💬 联系作者</h2>
+          <p class="section-desc">有任何问题或建议，欢迎添加学长微信</p>
+        </div>
+        <div class="contact-card">
+          <img src="/wechat-qr.jpg" alt="微信二维码" class="qr-img" />
+          <div class="contact-info">
+            <span class="contact-tag">📱 扫码添加微信</span>
+            <span class="contact-hint">备注"新生"更快通过哦~</span>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-
-const stats = [
-  { icon: '📍', value: '4', label: '校门（东西南北）' },
-  { icon: '🍽️', value: '3', label: '学生食堂' },
-  { icon: '🏢', value: '3', label: '主教学楼' },
-  { icon: '📚', value: '293万+', label: '图书馆藏书' },
-  { icon: '🏠', value: '6人', label: '上床下桌' },
-  { icon: '🚇', value: '北门直达', label: '地铁站' }
-]
 
 const facilities = [
   { icon: '🍜', name: '三大食堂', desc: '一餐精致、二餐实惠、三餐多样，还有蜜雪冰城、瑞幸、库迪咖啡' },
@@ -168,6 +144,8 @@ const guides = ref([
     content: '夜跑比赛、校园歌手大赛、王者荣耀高校赛等。操场经常有放电影、调酒、唱歌等小型活动。' },
   { icon: '🚌', title: '周边交通', expanded: false,
     content: '北门地铁站紫薇路直通济南西站。校门口学生公交可达历下区恒隆、万达。南边有园博园。大明湖、泉城广场、宽厚里、芙蓉街地铁可达。' },
+  { icon: '📦', title: '快递地址', expanded: false,
+    content: '山东省济南市长清区崮云湖街道大学路3501号 齐鲁工业大学(山东省科学院)长清校区。菜鸟驿站是全长清最大的快递站，含邮政（家属院天猫超市）、京东、顺丰、菜鸟。' },
   { icon: '⚠️', title: '防骗提示', expanded: false,
     content: '任何非官方人员以任何形式联系你进行消费或办理手续都是骗人的！校园卡不强制办理，录取通知书里的卡不建议太早激活。' }
 ])
@@ -194,6 +172,7 @@ const expandGuide = (g) => {
   padding: 80px 24px 64px;
   text-align: center;
   background: linear-gradient(135deg, #e8f4fd 0%, #f0e6f6 40%, #fef5e7 100%);
+  min-height: auto;
 }
 .hero-bg { position: absolute; inset: 0; overflow: hidden; }
 .hero-orb {
@@ -268,39 +247,6 @@ const expandGuide = (g) => {
 .section-header { text-align: center; margin-bottom: 40px; }
 .section-title { font-size: 28px; font-weight: 700; color: var(--text); }
 .section-desc { font-size: 15px; color: var(--text-light); margin-top: 8px; }
-.address-tip {
-  max-width: 520px;
-  margin: 16px auto 0;
-  padding: 10px 18px;
-  background: rgba(26, 111, 181, 0.06);
-  border: 1px solid rgba(26, 111, 181, 0.15);
-  border-radius: 8px;
-  font-size: 13px;
-  color: var(--primary-dark);
-  text-align: center;
-}
-
-/* ===== Stats ===== */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-.stat-card {
-  text-align: center;
-  padding: 28px 16px;
-  background: #fff;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.stat-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-}
-.stat-icon { font-size: 32px; margin-bottom: 8px; }
-.stat-value { font-size: 28px; font-weight: 800; color: var(--primary); }
-.stat-label { font-size: 13px; color: var(--text-light); margin-top: 4px; }
 
 /* ===== Facilities ===== */
 .facility-grid {
@@ -461,15 +407,28 @@ const expandGuide = (g) => {
   color: var(--text-light);
 }
 
+/* 手机端：只显示 Hero 区域，全屏居中 */
+.desktop-sections { display: block; }
 @media (max-width: 768px) {
-  .hero-title { font-size: 32px; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .facility-grid { grid-template-columns: 1fr; }
-  .quick-links { grid-template-columns: 1fr; }
-  .checklist-grid { grid-template-columns: repeat(2, 1fr); padding: 0 16px; }
+  .hero {
+    min-height: 100dvh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  .hero-title { font-size: 34px; }
+  .hero-subtitle { font-size: 16px; }
+  .hero-desc { font-size: 14px; }
+  .hero-badge { font-size: 13px; }
+  .hero-actions { flex-direction: column; align-items: center; }
+  .hero-actions .el-button { width: 220px; }
+  .hero-content { max-width: 100%; }
+  .desktop-sections { display: none; }
 }
 @media (max-width: 360px) {
-  .stats-grid { grid-template-columns: 1fr; }
-  .checklist-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 28px; }
 }
 </style>
