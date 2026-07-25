@@ -158,7 +158,7 @@ const sendMessage = async (text) => {
         'Authorization': `Bearer ${DEEPSEEK_KEY}`
       },
       body: JSON.stringify({
-        model: 'deepseek-chat',
+        model: 'deepseek-v4-flash',
         stream: true,
         temperature: 0.3,
         max_tokens: 2048,
