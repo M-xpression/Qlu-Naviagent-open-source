@@ -107,9 +107,9 @@ onMounted(() => {
   }
 })
 
-// ===== DeepSeek 免费 API 配置 =====
-const DEEPSEEK_KEY = import.meta.env.VITE_DEEPSEEK_KEY || ''
-const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions'
+// ===== 智谱AI GLM-4-Flash 配置 =====
+const API_KEY = import.meta.env.VITE_GLM_KEY || ''
+const API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
 
 // 知识库 System Prompt（从独立文件加载）
 import { SYSTEM_PROMPT } from '@/data/systemPrompt.js'
@@ -151,14 +151,14 @@ const sendMessage = async (text) => {
     // 限制对话历史（最近10轮=20条）
     const history = store.recentMessages.slice(0, -1).map(m => ({ role: m.role, content: m.content }))
 
-    const response = await fetch(DEEPSEEK_URL, {
+    const response = await fetch(API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${DEEPSEEK_KEY}`
+        'Authorization': `Bearer ${API_KEY}`
       },
       body: JSON.stringify({
-        model: 'deepseek-v4-flash',
+        model: 'glm-4-flash',
         stream: true,
         temperature: 0.3,
         max_tokens: 2048,
