@@ -54,7 +54,12 @@ export default defineConfig({
     port: 4300,
     strictPort: true,
     proxy: {
-      '/api': { target: 'http://localhost:8080', changeOrigin: true }
+      '/api': { target: 'http://localhost:8080', changeOrigin: true },
+      '/zhipu': {
+        target: 'https://open.bigmodel.cn/api/paas/v4',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/zhipu/, '')
+      }
     }
   }
 })

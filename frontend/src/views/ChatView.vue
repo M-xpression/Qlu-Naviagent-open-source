@@ -109,7 +109,7 @@ onMounted(() => {
 
 // ===== 智谱AI GLM-4-Flash 配置 =====
 const API_KEY = import.meta.env.VITE_GLM_KEY || ''
-const API_URL = 'https://open.bigmodel.cn/api/paas/v4/chat/completions'
+const API_URL = '/zhipu/chat/completions'
 
 // 知识库 System Prompt（从独立文件加载）
 import { SYSTEM_PROMPT } from '@/data/systemPrompt.js'
@@ -137,7 +137,7 @@ const scrollToBottom = () => {
   })
 }
 
-// 直接调用智谱AI GLM API（不走后端）
+// 通过 Vite/nginx 代理调用智谱AI GLM API（同源，避免浏览器跨域拦截）
 const sendMessage = async (text) => {
   const msg = text?.trim()
   if (!msg || store.streaming) return
@@ -151,24 +151,32 @@ const sendMessage = async (text) => {
     // 限制对话历史（最近10轮=20条）
     const history = store.recentMessages.slice(0, -1).map(m => ({ role: m.role, content: m.content }))
 
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`
-      },
-      body: JSON.stringify({
-        model: 'glm-4.7-flash',
-        stream: true,
-        temperature: 0.3,
-        max_tokens: 2048,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          ...history,
-          { role: 'user', content: msg }
-        ]
+    const requestBody = {
+      model: 'glm-4-flash',
+      stream: true,
+      temperature: 0.3,
+      max_tokens: 2048,
+      messages: [
+        { role: 'system', content: SYSTEM_PROMPT },
+        ...history,
+        { role: 'user', content: msg }
+      ]
+    }
+
+    // 智谱 1305「访问量过大」属于瞬时限流，这里最多重试 3 次（退避 1.5s/3s/6s）
+    let response
+    for (let attempt = 0; ; attempt++) {
+      response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${API_KEY}`
+        },
+        body: JSON.stringify(requestBody)
       })
-    })
+      if (response.ok || attempt >= 2) break
+      await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)))
+    }
 
     if (!response.ok) {
       const errText = await response.text()
