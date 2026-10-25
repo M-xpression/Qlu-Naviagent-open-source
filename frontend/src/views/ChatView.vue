@@ -137,7 +137,7 @@ const scrollToBottom = () => {
   })
 }
 
-// 直接调用 DeepSeek API（免费，不走后端）
+// 直接调用智谱AI GLM API（不走后端）
 const sendMessage = async (text) => {
   const msg = text?.trim()
   if (!msg || store.streaming) return
@@ -158,7 +158,7 @@ const sendMessage = async (text) => {
         'Authorization': `Bearer ${API_KEY}`
       },
       body: JSON.stringify({
-        model: 'glm-4-flash',
+        model: 'glm-4.7-flash',
         stream: true,
         temperature: 0.3,
         max_tokens: 2048,
@@ -210,7 +210,7 @@ const sendMessage = async (text) => {
     store.finishStreaming()
     scrollToBottom()
   } catch (e) {
-    console.error('DeepSeek error:', e)
+    console.error('GLM error:', e)
     store.addMessage('assistant', '抱歉，AI服务暂时不可用：' + e.message.slice(0, 80))
     store.finishStreaming()
   }

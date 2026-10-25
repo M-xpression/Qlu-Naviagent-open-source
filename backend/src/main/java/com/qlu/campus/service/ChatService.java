@@ -170,152 +170,147 @@ public class ChatService {
     }
 
     /**
-     * 调用AI API流式
+     * 调用AI API流式（根据 primary 配置选择主模型，失败自动降级）
      */
     private void callAIStream(String prompt, AICallback callback) {
+        boolean useZhipu = "zhipu".equalsIgnoreCase(aiProperties.getPrimary());
         try {
-            AIProperties.DeepSeekConfig ds = aiProperties.getDeepseek();
-            URI uri = URI.create(ds.getBaseUrl() + "/chat/completions");
-            HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Authorization", "Bearer " + ds.getApiKey());
-            conn.setDoOutput(true);
-            conn.setConnectTimeout(10000);
-            conn.setReadTimeout(120000);
-
-            // 构建请求体
-            JSONObject body = new JSONObject();
-            body.set("model", ds.getModel());
-            body.set("stream", true);
-            body.set("temperature", 0.3);
-            body.set("max_tokens", 2048);
-
-            JSONArray messages = new JSONArray();
-            JSONObject sysMsg = new JSONObject();
-            sysMsg.set("role", "system");
-            sysMsg.set("content", "你是一个有帮助的校园助手。");
-            messages.add(sysMsg);
-
-            JSONObject userMsg = new JSONObject();
-            userMsg.set("role", "user");
-            userMsg.set("content", prompt);
-            messages.add(userMsg);
-
-            body.set("messages", messages);
-
-            // 发送请求
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(body.toString().getBytes(StandardCharsets.UTF_8));
-                os.flush();
+            if (useZhipu) {
+                callZhipuStream(prompt, callback);
+            } else {
+                callDeepseekStream(prompt, callback);
             }
-
-            // 读取SSE流式响应
-            int status = conn.getResponseCode();
-            if (status != 200) {
-                // 尝试备用模型
-                fallbackToZhipu(prompt, callback);
-                return;
-            }
-
-            try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (line.startsWith("data: ")) {
-                        String data = line.substring(6);
-                        if ("[DONE]".equals(data)) {
-                            callback.onComplete();
-                            return;
-                        }
-                        try {
-                            JSONObject chunk = JSONUtil.parseObj(data);
-                            JSONArray choices = chunk.getJSONArray("choices");
-                            if (choices != null && !choices.isEmpty()) {
-                                JSONObject delta = choices.getJSONObject(0).getJSONObject("delta");
-                                if (delta != null && delta.containsKey("content")) {
-                                    String content = delta.getStr("content");
-                                    if (content != null) {
-                                        callback.onToken(content);
-                                    }
-                                }
-                            }
-                        } catch (Exception ignored) {}
-                    }
-                }
-            }
-            callback.onComplete();
-
         } catch (Exception e) {
-            log.error("AI流式调用失败", e);
-            fallbackToZhipu(prompt, callback);
+            log.error("主模型调用失败，尝试备用模型", e);
+            try {
+                if (useZhipu) {
+                    callDeepseekStream(prompt, callback);
+                } else {
+                    callZhipuStream(prompt, callback);
+                }
+            } catch (Exception e2) {
+                log.error("备用模型也失败了", e2);
+                callback.onError(e2);
+            }
         }
     }
 
     /**
-     * 降级到智谱AI
+     * 调用DeepSeek API流式
      */
-    private void fallbackToZhipu(String prompt, AICallback callback) {
-        try {
-            AIProperties.ZhipuConfig zhipu = aiProperties.getZhipu();
-            URI uri = URI.create(zhipu.getBaseUrl() + "/chat/completions");
-            HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestProperty("Authorization", "Bearer " + zhipu.getApiKey());
-            conn.setDoOutput(true);
-            conn.setConnectTimeout(10000);
-            conn.setReadTimeout(120000);
+    private void callDeepseekStream(String prompt, AICallback callback) throws Exception {
+        AIProperties.DeepSeekConfig ds = aiProperties.getDeepseek();
+        URI uri = URI.create(ds.getBaseUrl() + "/chat/completions");
+        HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Authorization", "Bearer " + ds.getApiKey());
+        conn.setDoOutput(true);
+        conn.setConnectTimeout(10000);
+        conn.setReadTimeout(120000);
 
-            JSONObject body = new JSONObject();
-            body.set("model", zhipu.getModel());
-            body.set("stream", true);
-            body.set("temperature", 0.3);
+        JSONObject body = new JSONObject();
+        body.set("model", ds.getModel());
+        body.set("stream", true);
+        body.set("temperature", 0.3);
+        body.set("max_tokens", 2048);
 
-            JSONArray messages = new JSONArray();
-            JSONObject userMsg = new JSONObject();
-            userMsg.set("role", "user");
-            userMsg.set("content", prompt);
-            messages.add(userMsg);
-            body.set("messages", messages);
+        JSONArray messages = new JSONArray();
+        JSONObject sysMsg = new JSONObject();
+        sysMsg.set("role", "system");
+        sysMsg.set("content", "你是一个有帮助的校园助手。");
+        messages.add(sysMsg);
 
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(body.toString().getBytes(StandardCharsets.UTF_8));
-                os.flush();
-            }
+        JSONObject userMsg = new JSONObject();
+        userMsg.set("role", "user");
+        userMsg.set("content", prompt);
+        messages.add(userMsg);
 
-            try (BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (line.startsWith("data: ")) {
-                        String data = line.substring(6);
-                        if ("[DONE]".equals(data)) {
-                            callback.onComplete();
-                            return;
-                        }
-                        try {
-                            JSONObject chunk = JSONUtil.parseObj(data);
-                            JSONArray choices = chunk.getJSONArray("choices");
-                            if (choices != null && !choices.isEmpty()) {
-                                JSONObject delta = choices.getJSONObject(0).getJSONObject("delta");
-                                if (delta != null && delta.containsKey("content")) {
-                                    String content = delta.getStr("content");
-                                    if (content != null) {
-                                        callback.onToken(content);
-                                    }
+        body.set("messages", messages);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(body.toString().getBytes(StandardCharsets.UTF_8));
+            os.flush();
+        }
+
+        int status = conn.getResponseCode();
+        if (status != 200) {
+            throw new RuntimeException("DeepSeek API返回状态码: " + status);
+        }
+
+        readSSEStream(conn, callback);
+    }
+
+    /**
+     * 调用智谱AI API流式
+     */
+    private void callZhipuStream(String prompt, AICallback callback) throws Exception {
+        AIProperties.ZhipuConfig zhipu = aiProperties.getZhipu();
+        URI uri = URI.create(zhipu.getBaseUrl() + "/chat/completions");
+        HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Authorization", "Bearer " + zhipu.getApiKey());
+        conn.setDoOutput(true);
+        conn.setConnectTimeout(10000);
+        conn.setReadTimeout(120000);
+
+        JSONObject body = new JSONObject();
+        body.set("model", zhipu.getModel());
+        body.set("stream", true);
+        body.set("temperature", 0.3);
+
+        JSONArray messages = new JSONArray();
+        JSONObject userMsg = new JSONObject();
+        userMsg.set("role", "user");
+        userMsg.set("content", prompt);
+        messages.add(userMsg);
+        body.set("messages", messages);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(body.toString().getBytes(StandardCharsets.UTF_8));
+            os.flush();
+        }
+
+        int status = conn.getResponseCode();
+        if (status != 200) {
+            throw new RuntimeException("智谱API返回状态码: " + status);
+        }
+
+        readSSEStream(conn, callback);
+    }
+
+    /**
+     * 读取SSE流式响应
+     */
+    private void readSSEStream(HttpURLConnection conn, AICallback callback) throws Exception {
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("data: ")) {
+                    String data = line.substring(6);
+                    if ("[DONE]".equals(data)) {
+                        callback.onComplete();
+                        return;
+                    }
+                    try {
+                        JSONObject chunk = JSONUtil.parseObj(data);
+                        JSONArray choices = chunk.getJSONArray("choices");
+                        if (choices != null && !choices.isEmpty()) {
+                            JSONObject delta = choices.getJSONObject(0).getJSONObject("delta");
+                            if (delta != null && delta.containsKey("content")) {
+                                String content = delta.getStr("content");
+                                if (content != null) {
+                                    callback.onToken(content);
                                 }
                             }
-                        } catch (Exception ignored) {}
-                    }
+                        }
+                    } catch (Exception ignored) {}
                 }
             }
-            callback.onComplete();
-
-        } catch (Exception e) {
-            log.error("备用模型也失败了", e);
-            callback.onError(e);
         }
+        callback.onComplete();
     }
 
     /**

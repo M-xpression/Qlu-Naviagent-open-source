@@ -14,7 +14,7 @@ public class AIProperties {
 
     private DeepSeekConfig deepseek;
     private ZhipuConfig zhipu;
-    private String primary = "deepseek";
+    private String primary = "zhipu";
 
     @Data
     public static class DeepSeekConfig {
@@ -27,6 +27,6 @@ public class AIProperties {
     public static class ZhipuConfig {
         private String apiKey;
         private String baseUrl = "https://open.bigmodel.cn/api/paas/v4";
-        private String model = "glm-4-flash";
+        private String model = "glm-4.7-flash";
     }
 }

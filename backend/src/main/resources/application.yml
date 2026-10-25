@@ -57,9 +57,9 @@ ai:
   zhipu:
     api-key: ${ZHIPU_API_KEY:your-zhipu-api-key}
     base-url: https://open.bigmodel.cn/api/paas/v4
-    model: glm-4-flash
+    model: glm-4.7-flash
   # 主模型选择: deepseek / zhipu
-  primary: deepseek
+  primary: zhipu
 
 # MinIO
 minio:

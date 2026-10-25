@@ -47,13 +47,13 @@ npm run build
 # dist/ 目录即为生产文件，直接部署到任意静态托管
 ```
 
-推荐使用 [Vercel](https://vercel.com) 一键部署：连接 GitHub 仓库 → Root Directory 选 `frontend` → 添加环境变量 `VITE_DEEPSEEK_KEY` → Deploy
+推荐使用 [Vercel](https://vercel.com) 一键部署：连接 GitHub 仓库 → Root Directory 选 `frontend` → 添加环境变量 `VITE_GLM_KEY` → Deploy
 
 ## ⚙️ 环境变量
 
 | 变量 | 说明 |
 |------|------|
-| `VITE_DEEPSEEK_KEY` | DeepSeek API Key，[免费注册获取](https://platform.deepseek.com) |
+| `VITE_GLM_KEY` | 智谱AI（GLM）API Key，[免费注册获取](https://open.bigmodel.cn) |
 
 ## 📁 项目结构
 
