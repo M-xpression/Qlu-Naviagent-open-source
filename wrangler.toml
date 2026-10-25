@@ -1,0 +1,8 @@
+name = "qlupilot-naviagent"
+main = "_worker.js"
+compatibility_date = "2025-01-01"
+
+[assets]
+directory = "./frontend/dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"

@@ -107,8 +107,7 @@ onMounted(() => {
   }
 })
 
-// ===== 智谱AI GLM-4-Flash 配置 =====
-const API_KEY = import.meta.env.VITE_GLM_KEY || ''
+// ===== 智谱AI GLM-4-Flash（经 Cloudflare Worker 代理转发）=====
 const API_URL = '/zhipu/chat/completions'
 
 // 知识库 System Prompt（从独立文件加载）
@@ -137,7 +136,7 @@ const scrollToBottom = () => {
   })
 }
 
-// 通过 Vite/nginx 代理调用智谱AI GLM API（同源，避免浏览器跨域拦截）
+// 调用智谱AI GLM（经 Cloudflare Worker / Vite / nginx 代理转发，同源无跨域）
 const sendMessage = async (text) => {
   const msg = text?.trim()
   if (!msg || store.streaming) return
@@ -148,7 +147,7 @@ const sendMessage = async (text) => {
   scrollToBottom()
 
   try {
-    // 限制对话历史（最近10轮=20条）
+    // 最近10轮（20条）作为上下文
     const history = store.recentMessages.slice(0, -1).map(m => ({ role: m.role, content: m.content }))
 
     const requestBody = {
@@ -163,15 +162,12 @@ const sendMessage = async (text) => {
       ]
     }
 
-    // 智谱 1305「访问量过大」属于瞬时限流，这里最多重试 3 次（退避 1.5s/3s/6s）
+    // 1305「访问量过大」限流时最多重试 3 次
     let response
     for (let attempt = 0; ; attempt++) {
       response = await fetch(API_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${API_KEY}`
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)
       })
       if (response.ok || attempt >= 2) break
@@ -218,7 +214,7 @@ const sendMessage = async (text) => {
     store.finishStreaming()
     scrollToBottom()
   } catch (e) {
-    console.error('GLM error:', e)
+    console.error('Chat error:', e)
     store.addMessage('assistant', '抱歉，AI服务暂时不可用：' + e.message.slice(0, 80))
     store.finishStreaming()
   }

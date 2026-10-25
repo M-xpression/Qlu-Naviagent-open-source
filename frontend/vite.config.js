@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
@@ -34,7 +34,10 @@ function persistHotspots() {
   }
 }
 
-export default defineConfig({
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, __dirname, '')
+
+  return {
   plugins: [
     vue(),
     persistHotspots(),
@@ -58,8 +61,10 @@ export default defineConfig({
       '/zhipu': {
         target: 'https://open.bigmodel.cn/api/paas/v4',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/zhipu/, '')
+        rewrite: (path) => path.replace(/^\/zhipu/, ''),
+        headers: { Authorization: `Bearer ${env.VITE_GLM_KEY || ''}` }
       }
     }
+  }
   }
 })
