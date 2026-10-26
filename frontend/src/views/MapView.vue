@@ -188,6 +188,7 @@ const resetView = () => recenterImage()
 
 // 坐标：屏幕点 → 反算变换 → 图片百分比
 function screenToImagePercent(clientX, clientY) {
+  if (!mapCanvas.value) return { x: 0, y: 0 }
   const rect = mapCanvas.value.getBoundingClientRect()
   const sx = clientX - rect.left
   const sy = clientY - rect.top
@@ -271,6 +272,7 @@ const onMouseUp = () => {
 
 const onWheel = (e) => {
   stopInertia()
+  if (!mapCanvas.value) return
   const rect = mapCanvas.value.getBoundingClientRect()
   const mx = e.clientX - rect.left
   const my = e.clientY - rect.top
